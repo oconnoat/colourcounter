@@ -1,8 +1,17 @@
+from __future__ import print_function
 from PIL import Image, ImageDraw
-from collections import Counter
+from collections import Counter, defaultdict
 
 rgbim = Image.open('photo.jpg').convert('RGB')
 colours = Counter()
+
+codes = defaultdict(str)
+
+with open('colourrgb.txt','r') as colour:
+    for line in colour:
+        name, rgb = line.split()
+        codes[rgb] = name
+
 
 # get the colour count info
 for i in xrange(rgbim.height):
@@ -22,3 +31,7 @@ for i, (colour, count) in enumerate(colours.most_common(150)):
             (0,0,0)
             )
     outputim.save('out.jpg')
+
+for colour, count in colours.most_common():
+    if codes[colour]:
+        print ("%s : %s" % (codes[colour], count))
